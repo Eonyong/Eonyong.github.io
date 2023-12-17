@@ -58,6 +58,7 @@ jobs:
         if: ${{ always() }}
       
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - 
         id: build-publish
