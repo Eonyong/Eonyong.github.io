@@ -59,6 +59,7 @@ jobs:
         if: ${{ always() }}
       
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - 
         name: Chaeck Out
