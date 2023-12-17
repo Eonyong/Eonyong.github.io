@@ -65,4 +65,4 @@ jobs:
         uses: bitovi/github-actions-react-to-github-pages@v1.2.0
         with:
           path: build
-          install_command: yarn install
+          install_command: 'yarn install'
