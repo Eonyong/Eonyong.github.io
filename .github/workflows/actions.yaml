@@ -1,0 +1,53 @@
+name: Blog Deploy
+
+# 트리거 설정
+# - 아래의 설정은 push가 되었을 때, 브랜치와 태그에 대한 푸시 이벤트 트리거를 설정 ('**'은 모든 조건에 대해 이벤트 트리거 설정)
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+
+# 작업을 진행하는 구문
+jobs:
+  # 작업의 이름 'build'
+  build:
+    name: Build Test
+    # 작업 환경을 구성하는 구문 (ubuntu 환경에서 작업 실행)
+    runs-on: ubuntu-latest
+    # 작업 순서를 차례대로 작성하는 구문
+    steps:
+    # name은 각 스텝의 이름을 명시해준다. uses의 경우에는 <저상소>/<기능>으로 저장소에 있는 기능 중 하나를 사용하도록 지정
+      - uses: actions/checkout@v4
+
+      -
+        name: Node.js Usage
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ secrets.NODE_VERSION }}
+      
+      -
+        name: node module Cache
+        uses: actions/cache@v2
+        id: Cache_Node
+        with:
+          path: node_module
+          key: npm-packages-${{ hashFiles('**/yarn.lock') }}
+      
+      -
+        name: Dependencies Installation
+        if: steps.Cache_Node.outputs.cache-hit != 'true'
+        run: yarn install
+      
+      -
+        run: yarn lint
+        if: ${{ always() }}
+      
+      -
+        run: yarn tsc
+        if: ${{ always() }}
+      
+      -
+        run: yarn build
+        if: ${{ always() }}
