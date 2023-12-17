@@ -57,5 +57,11 @@ jobs:
         if: ${{ always() }}
       
       -
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./_site
+          name: github-pages
+          retention-days: 1
+      -
         name: page-deploy
         uses: actions/deploy-pages@v3
