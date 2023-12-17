@@ -14,6 +14,7 @@ permissions:
   pages: write
   id-token: write
 
+
 # 작업을 진행하는 구문
 jobs:
   # 작업의 이름 'build'
@@ -58,11 +59,29 @@ jobs:
         if: ${{ always() }}
       
   deploy:
-    runs-on: ubuntu-latest
     steps:
       - 
-        id: build-publish
-        uses: bitovi/github-actions-react-to-github-pages@v1.2.0
-        with:
+        name: Chaeck Out
+        uses: actions/checkout@v3
+
+      -
+        name: Build
+        shell: bash
+        run: |
+          echo "::group::Build"
+          yarn install
+          yarn build
+          echo "::endgroup::"
+      
+      -
+        name: Upload
+        uses: actions/upload-pages-artifact@v1.0.4
+        with: 
           path: build
-          build_command: 'yarn build'
+
+      - id: deploy
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secret.GITHUB_TOKEN }}
+
