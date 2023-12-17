@@ -59,8 +59,8 @@ jobs:
       -
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./_site
-          name: github-pages
+          path: ./build
+          name: index
           retention-days: 1
       -
         name: page-deploy
