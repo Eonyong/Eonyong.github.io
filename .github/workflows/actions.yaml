@@ -10,8 +10,9 @@ on:
       - '**'
 
 permissions:
-  id-token: write
+  contents: read
   pages: write
+  id-token: write
 
 # 작업을 진행하는 구문
 jobs:
@@ -56,12 +57,10 @@ jobs:
         run: yarn build
         if: ${{ always() }}
       
-      -
-        uses: actions/upload-pages-artifact@v2
+  deploy:
+    steps:
+      - 
+        id: build-publish
+        uses: bitovi/github-actions-react-to-github-pages@v1.2.0
         with:
-          path: ./build
-          name: github-pages
-          retention-days: 1
-      -
-        name: page-deploy
-        uses: actions/deploy-pages@v3
+          path: build
